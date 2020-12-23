@@ -133,6 +133,16 @@ if(isset($_POST['addStudent'])){
 
 }
 
+if(isset($_POST['sendMessage'])){
+	$message = $_POST['message'];
+	$student_id = $_POST['student_id'];
+
+
+	$mysqli->query("insert into messages (message, student_id, adviser_id) values('$message', '$student_id',1)") or die(mysqli_error($mysqli));
+
+		header("location: student.php?student_id='$student_id'");
+}
+
 
 if(isset($_POST['addStudent1'])){
 	$name = $_POST['name'];
@@ -149,4 +159,32 @@ if(isset($_POST['addStudent1'])){
 	$mysqli->query("insert into students (name,surname,login, password,picture_url, gender,group_id) values('$name','$surname','$login', '$password', '$picture_url', '$gender', '$group_id')") or die(mysqli_error($mysqli));
 
 		header("location: details_group.php?group_id='$group_id'");
+}
+
+if(isset($_POST['loginBtn'])){
+
+	$url="login.php?error";
+	print_r($_POST);
+		if(isset($_POST['username'])&&isset($_POST['password'])){
+			require_once 'db.php';
+			$user=getAdviser($_POST['username']);
+			if($user!=null){
+				if($user['adviser_password']==$_POST['password']){
+					session_start();
+					$_SESSION['user']=$user;
+						setcookie('user_email', $user['username'], time()+60*60);
+						setcookie('user_password', $user['password'], time()+60*60);
+					$url="home.php";
+				}
+			}
+		}
+	header("Location:$url");
+}
+
+if(isset($_POST['search'])){
+	$searchText = $_POST['searchText'];
+
+
+	header("location: search.php?text='$searchText'");
+
 }

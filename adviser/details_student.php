@@ -185,7 +185,6 @@
 
                $result10 = $mysqli->query("select * from performances where student_id = ". $student_id ) or die(mysqli_error($mysqli));
               ?>
-            <tr>
               <?php  
                 while ($row = $result10->fetch_assoc()):
                   $query10="select * from courses where id=". $row['course_id'];
